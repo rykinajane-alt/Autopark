@@ -1,4 +1,3 @@
-
 package ru.autopark.autopark.controller;
 
 import jakarta.validation.Valid;
@@ -20,10 +19,15 @@ public class CarController {
         this.carService = carService;
     }
 
-    // Список автомобилей
+    // Список автомобилей и поиск
     @GetMapping
-    public String getAllCars(Model model) {
-        model.addAttribute("cars", carService.getAllCars());
+    public String getAllCars(
+            @RequestParam(required = false) String keyword,
+            Model model) {
+
+        model.addAttribute("cars", carService.searchCars(keyword));
+        model.addAttribute("keyword", keyword);
+
         return "cars";
     }
 

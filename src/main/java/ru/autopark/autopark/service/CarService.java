@@ -1,4 +1,3 @@
-
 package ru.autopark.autopark.service;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +18,22 @@ public class CarService {
     // Получить все автомобили
     public List<Car> getAllCars() {
         return carRepository.findAll();
+    }
+
+    // Поиск по марке, модели или регистрационному номеру
+    public List<Car> searchCars(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllCars();
+        }
+
+        String search = keyword.trim();
+
+        return carRepository
+                .findByBrandContainingIgnoreCaseOrModelContainingIgnoreCaseOrRegistrationNumberContainingIgnoreCase(
+                        search,
+                        search,
+                        search
+                );
     }
 
     // Получить автомобиль по ID
