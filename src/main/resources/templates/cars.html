@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Автопарк</title>
+
     <style>
         * {
             box-sizing: border-box;
@@ -41,6 +42,39 @@
             margin-bottom: 20px;
         }
 
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 11px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #273449;
+        }
+
+        .search-input:focus,
+        .sort-select:focus {
+            outline: none;
+            border-color: #315f9f;
+        }
+
+        .sort-select {
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #273449;
+            background: white;
+        }
+
         button, .button {
             display: inline-block;
             padding: 10px 16px;
@@ -54,6 +88,14 @@
 
         .add-button {
             background: #21864b;
+        }
+
+        .search-button {
+            background: #315f9f;
+        }
+
+        .reset-button {
+            background: #68758a;
         }
 
         .edit-button {
@@ -132,14 +174,30 @@
             table {
                 min-width: 750px;
             }
+
+            .search-form {
+                align-items: stretch;
+            }
+
+            .search-input {
+                flex-basis: 100%;
+            }
+
+            .sort-select {
+                flex: 1;
+                min-width: 140px;
+            }
         }
     </style>
 </head>
+
 <body>
 <div class="container">
 
     <h1>Информационная система «Автопарк»</h1>
-    <p class="subtitle">Список автомобилей и информация об их состоянии</p>
+    <p class="subtitle">
+        Список автомобилей и информация о владельцах
+    </p>
 
     <div class="top-actions">
         <a class="button add-button" th:href="@{/cars/new}">
@@ -147,20 +205,49 @@
         </a>
     </div>
 
+    <!-- Поиск и сортировка -->
+    <form class="search-form" th:action="@{/cars}" method="get">
+
+        <input
+                class="search-input"
+                type="text"
+                name="keyword"
+                placeholder="Введите марку автомобиля"
+                th:value="${keyword}">
+
+        <select class="sort-select" name="sortDir">
+            <option value="asc" th:selected="${sortDir == 'asc'}">
+                По возрастанию
+            </option>
+            <option value="desc" th:selected="${sortDir == 'desc'}">
+                По убыванию
+            </option>
+        </select>
+
+        <button type="submit" class="search-button">
+            Найти
+        </button>
+
+        <a class="button reset-button" th:href="@{/cars}">
+            Сбросить
+        </a>
+    </form>
+
+    <!-- Сообщение об успешном действии -->
     <div class="message"
          th:if="${successMessage}"
          th:text="${successMessage}">
     </div>
 
+    <!-- Таблица автомобилей -->
     <table>
         <thead>
         <tr>
             <th>ID</th>
             <th>Марка</th>
-            <th>Модель</th>
-            <th>Регистрационный номер</th>
-            <th>Пробег</th>
-            <th>Статус</th>
+            <th>Год выпуска</th>
+            <th>Дата постановки на учёт</th>
+            <th>ФИО владельца</th>
             <th>Действия</th>
         </tr>
         </thead>
@@ -169,10 +256,9 @@
         <tr th:each="car : ${cars}">
             <td th:text="${car.id}"></td>
             <td th:text="${car.brand}"></td>
-            <td th:text="${car.model}"></td>
-            <td th:text="${car.registrationNumber != null ? car.registrationNumber : '—'}"></td>
-            <td th:text="${car.mileage != null ? car.mileage + ' км' : '—'}"></td>
-            <td th:text="${car.status != null ? car.status : 'Не указан'}"></td>
+            <td th:text="${car.year}"></td>
+            <td th:text="${car.registrationDate != null ? car.registrationDate : '—'}"></td>
+            <td th:text="${car.ownerFullName}"></td>
             <td>
                 <div class="actions">
                     <a class="button edit-button"
@@ -192,13 +278,14 @@
         </tr>
 
         <tr th:if="${#lists.isEmpty(cars)}">
-            <td colspan="7" class="empty">
+            <td colspan="6" class="empty">
                 Автомобили не найдены
             </td>
         </tr>
         </tbody>
     </table>
 
+    <!-- Счётчик записей -->
     <p class="count">
         Количество автомобилей в таблице:
         <strong th:text="${#lists.size(cars)}">0</strong>

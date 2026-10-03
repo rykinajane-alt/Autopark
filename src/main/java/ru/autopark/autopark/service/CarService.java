@@ -15,39 +15,32 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    // Получить все автомобили
+    // Получение всех автомобилей
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }
 
-    // Поиск по марке, модели или регистрационному номеру
+    // Поиск автомобилей по марке
     public List<Car> searchCars(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return getAllCars();
+        if (keyword == null || keyword.isBlank()) {
+            return carRepository.findAll();
         }
 
-        String search = keyword.trim();
-
-        return carRepository
-                .findByBrandContainingIgnoreCaseOrModelContainingIgnoreCaseOrRegistrationNumberContainingIgnoreCase(
-                        search,
-                        search,
-                        search
-                );
+        return carRepository.findByBrandContainingIgnoreCase(keyword.trim());
     }
 
-    // Получить автомобиль по ID
+    // Получение автомобиля по ID
     public Car getCarById(Long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Автомобиль не найден"));
     }
 
-    // Сохранить автомобиль
+    // Сохранение автомобиля
     public Car saveCar(Car car) {
         return carRepository.save(car);
     }
 
-    // Удалить автомобиль
+    // Удаление автомобиля
     public void deleteCar(Long id) {
         carRepository.deleteById(id);
     }

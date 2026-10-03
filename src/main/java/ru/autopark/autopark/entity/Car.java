@@ -3,7 +3,10 @@ package ru.autopark.autopark.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "cars")
@@ -17,17 +20,15 @@ public class Car {
     @Column(nullable = false)
     private String brand;
 
-    @NotBlank(message = "Введите модель автомобиля")
+    @NotNull(message = "Укажите год выпуска")
+    private Integer year;
+
+    @NotNull(message = "Укажите дату постановки на учёт")
+    private LocalDate registrationDate;
+
+    @NotBlank(message = "Введите ФИО владельца")
     @Column(nullable = false)
-    private String model;
-
-    @Column(unique = true)
-    private String registrationNumber;
-
-    @PositiveOrZero(message = "Пробег не может быть отрицательным")
-    private Integer mileage;
-
-    private String status;
+    private String ownerFullName;
 
     public Car() {
     }
@@ -48,35 +49,27 @@ public class Car {
         this.brand = brand;
     }
 
-    public String getModel() {
-        return model;
+    public Integer getYear() {
+        return year;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-    public Integer getMileage() {
-        return mileage;
+    public String getOwnerFullName() {
+        return ownerFullName;
     }
 
-    public void setMileage(Integer mileage) {
-        this.mileage = mileage;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
     }
 }

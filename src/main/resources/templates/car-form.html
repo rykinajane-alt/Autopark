@@ -112,44 +112,37 @@
         </div>
 
         <div class="form-group">
-            <label for="model">Модель автомобиля</label>
-            <input type="text"
-                   id="model"
-                   th:field="*{model}"
-                   placeholder="Например, Camry">
-            <span class="error"
-                  th:if="${#fields.hasErrors('model')}"
-                  th:errors="*{model}"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="registrationNumber">Регистрационный номер</label>
-            <input type="text"
-                   id="registrationNumber"
-                   th:field="*{registrationNumber}"
-                   placeholder="Например, А123АА">
-        </div>
-
-        <div class="form-group">
-            <label for="mileage">Пробег (км)</label>
+            <label for="year">Год выпуска</label>
             <input type="number"
-                   id="mileage"
-                   th:field="*{mileage}"
-                   min="0"
-                   placeholder="Введите пробег">
+                   id="year"
+                   th:field="*{year}"
+                   min="1900"
+                   placeholder="Например, 2020">
             <span class="error"
-                  th:if="${#fields.hasErrors('mileage')}"
-                  th:errors="*{mileage}"></span>
+                  th:if="${#fields.hasErrors('year')}"
+                  th:errors="*{year}"></span>
         </div>
 
         <div class="form-group">
-            <label for="status">Статус автомобиля</label>
-            <select id="status" th:field="*{status}">
-                <option value="">Выберите статус</option>
-                <option value="Доступен">Доступен</option>
-                <option value="В рейсе">В рейсе</option>
-                <option value="На обслуживании">На обслуживании</option>
-            </select>
+            <label for="registrationDate">Дата постановки на учёт</label>
+            <input type="date"
+                   id="registrationDate"
+                   name="registrationDate"
+                   th:value="${car.registrationDate != null ? car.registrationDate.toString() : ''}">
+            <span class="error"
+                  th:if="${#fields.hasErrors('registrationDate')}"
+                  th:errors="*{registrationDate}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="ownerFullName">ФИО владельца</label>
+            <input type="text"
+                   id="ownerFullName"
+                   th:field="*{ownerFullName}"
+                   placeholder="Введите ФИО владельца">
+            <span class="error"
+                  th:if="${#fields.hasErrors('ownerFullName')}"
+                  th:errors="*{ownerFullName}"></span>
         </div>
 
         <div class="buttons">
