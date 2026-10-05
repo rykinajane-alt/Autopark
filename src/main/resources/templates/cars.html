@@ -1,12 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Автопарк</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -39,6 +44,9 @@
         }
 
         .top-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -75,7 +83,8 @@
             background: white;
         }
 
-        button, .button {
+        button,
+        .button {
             display: inline-block;
             padding: 10px 16px;
             border: none;
@@ -88,6 +97,10 @@
 
         .add-button {
             background: #21864b;
+        }
+
+        .statistics-button {
+            background: #315f9f;
         }
 
         .search-button {
@@ -106,7 +119,8 @@
             background: #c63838;
         }
 
-        button:hover, .button:hover {
+        button:hover,
+        .button:hover {
             opacity: 0.88;
         }
 
@@ -124,7 +138,8 @@
             margin-top: 15px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 12px;
             border: 1px solid #d5deea;
             text-align: left;
@@ -162,6 +177,7 @@
         }
 
         @media (max-width: 800px) {
+
             body {
                 padding: 10px;
             }
@@ -188,25 +204,40 @@
                 min-width: 140px;
             }
         }
+
     </style>
+
 </head>
 
 <body>
+
 <div class="container">
 
     <h1>Информационная система «Автопарк»</h1>
+
     <p class="subtitle">
         Список автомобилей и информация о владельцах
     </p>
 
+    <!-- Кнопки -->
     <div class="top-actions">
-        <a class="button add-button" th:href="@{/cars/new}">
+
+        <a class="button add-button"
+           th:href="@{/cars/new}">
             + Добавить автомобиль
         </a>
+
+        <a class="button statistics-button"
+           th:href="@{/cars/statistics}">
+            Статистика
+        </a>
+
     </div>
 
     <!-- Поиск и сортировка -->
-    <form class="search-form" th:action="@{/cars}" method="get">
+    <form class="search-form"
+          th:action="@{/cars}"
+          method="get">
 
         <input
                 class="search-input"
@@ -215,22 +246,31 @@
                 placeholder="Введите марку автомобиля"
                 th:value="${keyword}">
 
-        <select class="sort-select" name="sortDir">
-            <option value="asc" th:selected="${sortDir == 'asc'}">
+        <select class="sort-select"
+                name="sortDir">
+
+            <option value="asc"
+                    th:selected="${sortDir == 'asc'}">
                 По возрастанию
             </option>
-            <option value="desc" th:selected="${sortDir == 'desc'}">
+
+            <option value="desc"
+                    th:selected="${sortDir == 'desc'}">
                 По убыванию
             </option>
+
         </select>
 
-        <button type="submit" class="search-button">
+        <button type="submit"
+                class="search-button">
             Найти
         </button>
 
-        <a class="button reset-button" th:href="@{/cars}">
+        <a class="button reset-button"
+           th:href="@{/cars}">
             Сбросить
         </a>
+
     </form>
 
     <!-- Сообщение об успешном действии -->
@@ -241,7 +281,9 @@
 
     <!-- Таблица автомобилей -->
     <table>
+
         <thead>
+
         <tr>
             <th>ID</th>
             <th>Марка</th>
@@ -250,47 +292,81 @@
             <th>ФИО владельца</th>
             <th>Действия</th>
         </tr>
+
         </thead>
 
         <tbody>
+
         <tr th:each="car : ${cars}">
+
             <td th:text="${car.id}"></td>
+
             <td th:text="${car.brand}"></td>
+
             <td th:text="${car.year}"></td>
-            <td th:text="${car.registrationDate != null ? car.registrationDate : '—'}"></td>
+
+            <td th:text="${car.registrationDate != null
+                         ? car.registrationDate
+                         : '—'}">
+            </td>
+
             <td th:text="${car.ownerFullName}"></td>
+
             <td>
+
                 <div class="actions">
+
+                    <!-- Редактирование -->
                     <a class="button edit-button"
                        th:href="@{/cars/edit/{id}(id=${car.id})}">
                         Изменить
                     </a>
 
+                    <!-- Удаление -->
                     <form th:action="@{/cars/delete/{id}(id=${car.id})}"
                           method="post"
                           onsubmit="return confirm('Удалить этот автомобиль?');">
-                        <button type="submit" class="delete-button">
+
+                        <button type="submit"
+                                class="delete-button">
                             Удалить
                         </button>
+
                     </form>
+
                 </div>
+
             </td>
+
         </tr>
 
+        <!-- Если автомобилей нет -->
         <tr th:if="${#lists.isEmpty(cars)}">
-            <td colspan="6" class="empty">
+
+            <td colspan="6"
+                class="empty">
                 Автомобили не найдены
             </td>
+
         </tr>
+
         </tbody>
+
     </table>
 
     <!-- Счётчик записей -->
     <p class="count">
+
         Количество автомобилей в таблице:
-        <strong th:text="${#lists.size(cars)}">0</strong>
+
+        <strong th:text="${#lists.size(cars)}">
+            0
+        </strong>
+
     </p>
 
 </div>
+
 </body>
+
 </html>
