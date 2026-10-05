@@ -1,10 +1,9 @@
-
 package ru.autopark.autopark.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
@@ -17,6 +16,10 @@ public class Car {
     private Long id;
 
     @NotBlank(message = "Введите марку автомобиля")
+    @Pattern(
+            regexp = "^[А-Яа-яЁё0-9\\s.,«»()'’&-]+$",
+            message = "Марка автомобиля должна быть написана кириллицей"
+    )
     @Column(nullable = false)
     private String brand;
 
